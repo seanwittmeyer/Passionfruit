@@ -1,0 +1,110 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/*
+ * Passionfruit Example Page Styles v1.0.1
+ * Sean Wittmeyer (sean at zilifone dot net)
+ * http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery
+ *
+ * This stylesheet is only used for the example site. Feel free to use it to make
+ * your own Passionfruit gallery.
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Last update: 14-11-2011
+ *
+ */
+
+/* Webfonts */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans); 
+/* Reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    background: transparent;
+    border: 0;
+    font-size: 99%;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+body {
+    line-height: 1.2;
+}
+
+/* Set defaults for HTML5 elements, for IE */
+section, article, header, footer, nav, aside, hgroup {
+    display: block;
+}
+
+
+/* Page styles */
+* {
+	padding: 0;
+	margin: 0;
+}
+body {
+    background: #999;
+    color: #444;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    line-height: 1.5em;
+    width: 100%;
+    padding: 25px 0 30px 25px;
+    -webkit-text-size-adjust: none;
+    
+}
+header {
+	position: fixed;
+	top: 0;
+	z-index: 997;
+	background: #999;
+	background: rgba(153, 153, 153, .9);
+	width: 100%;
+	padding: 25px 0 10px 0;
+}
+p {
+	width: 750px;
+	margin: 0 0 10px 0;
+}
+#container {
+	margin: 160px 0 0 0;
+}
+#container a {
+	text-decoration: none;
+}
+nav a { 
+	color: #222; 
+	text-decoration: none; 
+	padding: 0 5px 0 0; 
+}
+nav a:hover { 
+	color: #333; 
+	text-decoration: underline; 
+}
+nav a:active { 
+	color: #000; 
+	text-decoration: none; 
+}
+.header_img {
+    margin: 25px 0 0 25px;
+    z-index: 11;
+}
+.nav_container {
+    margin: 0px 0 0 25px;
+    height: auto;
+    line-height: 2.4em;
+    width: 200px;
+    z-index: 50;
+    position:absolute; 
+}
+
