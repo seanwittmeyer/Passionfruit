@@ -1,0 +1,34 @@
+Passionfruit Wishlist
+
+This is a roadmap of sorts, with a more playful approach. This can also be considered the 
+home of all of the issues I've found. Think of it as Christmas time for passionfruit, what 
+needs to be fixed and what should be added.
+
+
+Version 1.0.2 Wishlist
+-	Fix browser detect bugs
+-	Separate passionfuit from the index.php file into it's own include as passionfruit.php
+-	Better fix for the $_fancybox.close runaway timer
+-	Update demo html/css, removing pixels for percentage to prevent the body being wider 
+	then the browser viewport
+-	Combine javascript includes into a single file sans errors
+-	iOS display error fix
+-	Better documentation for 3rd party script implementation (help users access features in
+	isotope, queryloader, bbq, cloud-zoom and fancybox)
+-	meta.txt file generator on the demo site
+-	Better optimization documentation (passionfruit can be slow if you have 200+ iamges)
+-	Fix back button bug (inability to go back to the original load state)
+-	Fix recursive gallery loading when 4+ levels deep
+-	Optimize php array and variable access in the passionfruit() php function
+
+Version 1.1 Wishlist
+-	Enable ajax/json API so you only load and append content you want to see instead of 
+	being serverd the whole enchilada all at once (this is what makes this a 1.1 release)
+	
+-	Develop the plugin framework (or the lack there of)
+-	Add plugin for external image storage support (S/FTP)
+-	Add plugin for initial thumbnail build (script you run if thumbs don't exist to get a 
+	new gallery or album up and running without the need for external/additional prep)
+-	Automatic detection of sortable classes (from all meta.txt) and link creation 
+-	Breadcrumbs with titles with links to active content
+-	Add mobile plugin
