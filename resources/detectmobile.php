@@ -1,14 +1,22 @@
 <?php 
-$mobile_browser = '0';
+/*	Passionfruit Mobile Device Detector 1.0.2
+ *	By Sean Wittmeyer (sean at zilifone dot net)
+ *
+ *	This script allows you to detect and warn mobile users who visit your
+ *	gallery. This was made because passionfruit, with 100+ images, can 
+ *	quickly use up mobile/cell data and requires a fair amount of memory
+ *	to run the page, which some mobile devices may have a ahard time with.
+ *	This script forwards mobile users to the warning.html file
+ */
+ 
+$mobile_browser = 0;
 
 if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android)/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
-    $mobile_browser++;
+	$mobile_browser++;
 }
- 
 if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') > 0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
     $mobile_browser++;
 }    
- 
 $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'], 0, 4));
 $mobile_agents = array(
     'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
@@ -18,23 +26,25 @@ $mobile_agents = array(
     'newt','noki','oper','palm','pana','pant','phil','play','port','prox',
     'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
     'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
-    'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp','iemobile',
-    'wapr','webc','winw','winw','xda ','xda-');
- 
+    'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
+    'wapr','webc','winw','winw','xda ','xda-','iemobile','mobile');
 if (in_array($mobile_ua,$mobile_agents)) {
     $mobile_browser++;
 }
- 
 if (strpos(strtolower($_SERVER['ALL_HTTP']),'OperaMini') > 0) {
     $mobile_browser++;
 }
- 
+if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'Mac') > 0) {
+    $mobile_browser = 0;
+}
 if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows') > 0) {
     $mobile_browser = 0;
 }
-
+if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'mobile') > 0) {
+    $mobile_browser++;
+}
 if ($mobile_browser !== 0) {
-	if($_COOKIE['mobilebypass'] !== "yes") setcookie("mobilebypass" ,"no", mktime (0, 0, 0, 12, 31, 2013), "/");
+	if($_COOKIE['mobilebypass'] !== "yes") setcookie("mobilebypass" ,"no", mktime (0, 0, 0, 12, 31, 2012), "/");
 	$mobilebypass = $_COOKIE["mobilebypass"];
 	if(isset($_GET["bypass"])) {
 		setcookie("mobilepass" ,"yes", mktime (0, 0, 0, 12, 31, 2012), "/");
@@ -44,6 +54,5 @@ if ($mobile_browser !== 0) {
 			header("Location: $url");
 		}
 	}
-
 }
 ?>

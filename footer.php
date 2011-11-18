@@ -1,13 +1,14 @@
 
 
-</div> <!-- #container -->
+</div> <!-- #container --> <!-- you must include this for passionfruit to work -->
 
-<script src="resources/js/jquery.isotope.min.js"></script>
-<script src="resources/js/jquery.mousewheel-3.0.4.pack.js"></script>
-<script src="resources/js/cloud-zoom.1.0.2.min.js"></script>
-<script src="resources/js/jquery.fancybox-1.3.4.pack.js"></script>
-<script src="resources/js/jquery.ba-bbq.min.js"></script>
+<script src="resources/js/jquery.isotope.min.js"></script> <!-- Required for passionfruit -->
+<script src="resources/js/jquery.mousewheel-3.0.4.pack.js"></script> <!-- Required if you want to use the scroll wheel on a mouse in the image popups -->
+<script src="resources/js/cloud-zoom.1.0.2.min.js"></script> <!-- Required if you want the zoom feature in the image popups -->
+<script src="resources/js/jquery.fancybox-1.3.4.pack.js"></script> <!-- Required for image popups -->
+<script src="resources/js/jquery.ba-bbq.min.js"></script> <!-- Required for passionfruit -->
 
+<!-- BEGIN Passionfruit Javascript (include this to make passionfruit work) -->
 <script>
 	var $container = $('#container');
 	$container.isotope({
@@ -100,15 +101,28 @@
 		});
 	});
 </script>
-    
+<!-- END Passionfruit Javascript -->
+
     <footer id="site-footer">
     </footer>
     
   </section> <!-- #content -->
 
   <!-- analytics -->
-  <script>
-  </script>
+<script type="text/javascript">
 
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-336608-24']);
+  _gaq.push(['_setDomainName', 'none']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script> 
 </body>
 </html>

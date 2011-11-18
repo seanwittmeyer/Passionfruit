@@ -1,11 +1,11 @@
-# htaccess suggestions for use with Passionfruit. This file optimizes load times by utilizing gzip and the browser cache
+# htaccess suggestions for use with Passionfruit
 
 # Passionfruit requires php5
 AddHandler php5-script .php
 
 # BEGIN Compress text files
 <ifModule mod_deflate.c>
-  <filesMatch "\.(css|js|x?html?|php)$">
+  <filesMatch "\.(css|js|jpg|jpeg|png|gif)$">
     SetOutputFilter DEFLATE
   </filesMatch>
 </ifModule>

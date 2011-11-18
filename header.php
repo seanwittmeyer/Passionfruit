@@ -12,15 +12,17 @@
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<link rel="stylesheet" href="./resources/passionfruit.css" />
 	<link rel="stylesheet" href="./resources/styles.css" />
-	<script src="/resources/jquery-1.6.2.min.js"></script>
-	<script src="/resources/js/queryLoader.js"></script>
-	<script src="/resources/js/modernizr-transitions.js"></script>
-
+	<script src="/resources/jquery-1.6.2.min.js"></script> <!-- Required for passionfruit -->
+	<script src="/resources/js/queryLoader.js"></script> <!-- Required for loading bar -->
+	<script src="/resources/js/modernizr-transitions.js"></script> <!-- Required for animations -->
+	
+	<!-- This activates the loading bar, if you don't want to use it, remove the following 5 lines from <script> to </script> -->
 	<script>
 		$(document).ready(function () {
 			$("#container").queryLoader2();
 		});
 	</script>
+	
 	<!-- other scripts at bottom of page -->
 </head>
 <body class="homepage ">
@@ -45,21 +47,23 @@
 				<a class="filter" href="#filter=.planes">Planes</a>
 				
 				<!--
-				Use jQuery param() to encode links for sorting with tags 
+				Use jQuery param() to encode links for sorting with tags:
 				$.param({ filter: '.metal' })
 				// >> "filter=.metal"
-				$.param({ filter: '.alkali, alkaline-earth' })
-				// >> "filter=.alkali%2C+alkaline-earth"
-				$.param({ filter: ':not(.transition)' })
-				// >> "#filter=%3Anot(.transition)"
+				
+				$.param({ filter: '.space, scpace-craft' })
+				// >> "filter=.space%2C+scpace-craft"
+				
+				$.param({ filter: ':not(.planes)' })
+				// >> "#filter=%3Anot(.planes)"
 
-				<a href="#filter" data-option-value=":not(.transition)">not transition</a>
-				<a href="#filter" data-option-value=".metal:not(.transition)">metal but not transition</a> -->
+				<a href="#filter" data-option-value=":not(.planes)">not planes</a>
+				<a href="#filter" data-option-value=".space:not(.planes)">metal but not transition</a> -->
 
 				<div class="clear"></div>
 			</div>
 		</nav> <!-- #site-nav -->
 	</header>
 	<section id="content">
-		<div id="container" class="transitions-enabled clearfix">
+		<div id="container" class="transitions-enabled clearfix"> <!-- you must include this for passionfruit to work -->
   

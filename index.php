@@ -1,6 +1,6 @@
 <?php
 
-/*	Passionfruit 1.0.1, a simple photo gallery
+/*	Passionfruit 1.0.2, a simple photo gallery
  *	By Sean Wittmeyer (sean at zilifone dot net)
  *	http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery
  *
@@ -15,42 +15,20 @@
  *
  *	To use passionfruit, place your full images in the 'images' directory and  
  *	thumbnails in the 'thumbs' directory. Make sure the full image and thumbnail
- *	have the same filename, and the path to these files are the same. Example:
- *	
- *		For an image from the beach and barcelona albums, 
- *		the paths could be: 	/images/barcelona/beach/IMG_1.jpg
- *								/thumbs.barcelona/beach/IMG_1.jpg
- *		
+ *	have the same filename, and the path to these files are the same. 
  *
- *	You may name the albums anything you want. The folder names should have no 
- *	spaces. To have a pretty album name, read about the meta.txt file below. 
+ *	Don't have thumbnails made? You can use the createthumbs.php script included 
+ *	to make thumbs if you don't want to do it yourself. The script will make the 
+ *	folders and put the thumbs in the right space.
+ *	
+ *	You may name the albums anything you want. The folder names should have NO 
+ *	SPACES. To have a pretty album name, read about the meta.txt file below. 
  *	Avoid naming events/directories the foillowing: box, img, dir, bg, lb
  *	
- *	Your image thumbnails should all be the same width, height does not matter.
- *	The default is 200px wide. You can change this below and in the passionfruit
- *	javascript file (change both to make it work properly). Full Images can be 
- *	any size, just be aware that bigger images take more server space and longer 
- *	to load. You can utilize the fancybox + cloudzoom feature of this gallery for
- *	showcasing large images such as panoramas and detailed images.
  *
- *	To use the metadata features for albums, you should place a 'meta.txt' file
- *	in each thumb event directory, with the following variables in a single line
- *	string separated by commas:
- *
- *	$event_name,$zoom,$cover,$tags
- *
- *	$event_name		The event title, you can use spaces here
- *	$zoom			'no' prevents the follow the cursor zoom feature in lightbox
- *	$cover			event cover image, enter filename only
- *	$tags			tags are single words, separated by spaces, for filtering  
- *					images via isotope (i.e. spain barcelona casa_mila)
- *
- *	An example meta.txt file could look like this:
- *	Tour of Casa Mila,no,image1234.jpg,spain barcelona casa_mila
- *
- *	See the example meta.txt and gallery structure included with this build to  
- *	see sample foramtting of the meta file. If things are just not working out
- *	of the box, visit the FAQ online or refer to the readme.txt file included.
+ *	QUESTIONS? See the included readme.txt file for instructions on using this
+ *	gallery and for help with all of passionfruit's features.
+ *	
  *
  *	This uses a number of javascripts by awesome people, these include:
  *	jQuery 1.6.2 by John Resig (http://jquery.org)
@@ -59,49 +37,49 @@
  *	BBQ 1.2.1 by Ben Alman (http://benalman.com/projects/jquery-bbq-plugin/)
  *	Cloud Zoom 1.0.2 by R. Cecco (http://www.professorcloud.com)
  *
- *	Known Issues in 1.0:
+ *	Known Issues in 1.0.2:
  *	Empty folders still show as blank boxes.
  *	Folders 4 levels deep don't show images
- *	Runaway javascript counter when using the built in fancy box next/previous 
- *		navigation (they are disabled in the current version avoiding trouble)
  *	Back button doesn't take you to the top level gallery listing
  *	
  *	Licensed under the MIT license:
  *	http://www.opensource.org/licenses/mit-license.php
  *
- *	Last update: 14-11-2011 (version 1.0.1)
+ *	Last update: 18-11-2011 (version 1.0.2)
  *
  *	Thanks for playing and have a nice day!
  */
  
 
-/*  MOBILE PHONE CHECK  *
+/*  MOBILE DEVICE CHECK  *
 	This script is optional. If you are using passionfruit with a large number of images (100+), you may 
 	want to include this. All it does is checks to see if the visitor is on a device that may have a hard 
 	time with lots of data, or a phone on a cell network. If a mobile user is detected, it forwards the 
 	user to the warning.html page. If the user agrees, a cookie is set and the message goes away for good. */
-	//	include('./resources/detectmobile.php');	// path to detectmobile.php (optional)
+	include('./resources/detectmobile.php');	// path to detectmobile.php (optional)
 
 
 /*  SET UP  */
 
-$header = "./header.php";						// path to the website header (this file must include passionfruit.scripts.pack.js and jQuery)
-$footer = "./footer.php";						// path to the website footer (this file must include passionfruit.js)
-$dir = "thumbs/";								// path to the thumbs directory (thumbs/ is default, make sure you include the trailing slash)
-$dir_images = "images/";						// path to the images directory (images/ is default, make sure you include the trailing slash)
-$class_dir = "dir";								// css class for directory div (dir by default)
-$class_img = "img";								// css class for image div (img by default)
-$path = "";										// relative path to the thumbs, leave blank if the thumbs and images directories are in the same directory as this script.
+	$header = "./header.php";						// path to the website header (this file must include passionfruit.scripts.pack.js and jQuery)
+	$footer = "./footer.php";						// path to the website footer (this file must include passionfruit.js)
+	$dir = "thumbs/";								// path to the thumbs directory (thumbs/ is default, make sure you include the trailing slash)
+	$dir_images = "images/";						// path to the images directory (images/ is default, make sure you include the trailing slash)
+	$class_dir = "dir";								// css class for directory div (dir by default)
+	$class_img = "img";								// css class for image div (img by default)
+	$path = "";										// relative path to the thumbs, leave blank if the thumbs and images directories are in the same directory as this script.
 
+
+//	DON'T EDIT ANYTHING BELOW or the gallery may no longer work. You have been warned.
 
 /*  BENCHMARKING  *
 	Passionfruit can be a processor intensive script if you have 100+ images in your gallery. To see how long the page takes to load, you can 
 	uncomment these lines of PHP. It sets the current time in a variable which is used to calculate the time it takes to fun the gallery. The 
 	second part of the script is at the bottom of the page. To fully optimize Passionfruit, see the readme.txt file. */
-	//	$mtime = microtime(); 
-	//	$mtime = explode(" ",$mtime); 
-	//	$mtime = $mtime[1] + $mtime[0]; 
-	//	$starttime = $mtime; 
+	$mtime = microtime(); 
+	$mtime = explode(" ",$mtime); 
+	$mtime = $mtime[1] + $mtime[0]; 
+	$starttime = $mtime; 
 
 /*  FUNCTIONS  */
 
@@ -121,7 +99,7 @@ function fetch_random_image($dir) {														// Randomly find a image for th
 	mt_srand((double)microtime()*1000000); 												// seed for PHP < 4.2
 	$rand = mt_rand(0, $i); 															// $i was incremented as we went along
 	return $files[$rand]; 																// return the lucky winner
-}
+} // end function fetch_random_image();
 
 function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$zoom,$properpath,$metatags) {
 	// This function is the main function of the script, it does all of the work.
@@ -186,25 +164,24 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 } // end function passionfruit();
 
 
-/*  BUILD THE GALLERY  */
-
-include($header);																		// start with including the header file (optional)
-passionfruit($dir,$dir_images,$class_dir,$class_img,$path,'','','','');					// begin searching the base directory
-include($footer);																		// end with including the footer file (optional)
+/*  BUILD THE GALLERY  
+	Set the header and footer files above in the 'set up' section */
+	include($header);																		// start with including the header file
+	passionfruit($dir,$dir_images,$class_dir,$class_img,$path,'','','','');					// begin searching the base directory
+	include($footer);																		// end with including the footer file
 
 /*  BENCHMARKING  *
 	So, how long did it take for passionfruit to run? */
-	//	$mtime = microtime(); 
-	//	$mtime = explode(" ",$mtime); 
-	//	$mtime = $mtime[1] + $mtime[0]; 
-	//	$endtime = $mtime; 
-	//	$totaltime = ($endtime - $starttime); 
-	//	echo "This page was synthesized from pure unicorn tears in a mere $totaltime seconds <br />"
+	$mtime = microtime(); 
+	$mtime = explode(" ",$mtime); 
+	$mtime = $mtime[1] + $mtime[0]; 
+	$endtime = $mtime; 
+	$totaltime = ($endtime - $starttime); 
+	echo "<!--This page was synthesized from pure unicorn tears in a mere $totaltime seconds -->"; 
 
 
 /*  KARMA  *
 	If you like Passionfruit, share it with your friends. A simple link will ensure happiness for all :) */
-	
-print 'Powered by <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery" target="_blank">Passionfruit 1.0.1</a> by Sean Wittmeyer';	
+	print 'Powered by <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery" target="_blank">Passionfruit 1.0.2</a>';	
 
 ?>
