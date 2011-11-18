@@ -1,11 +1,11 @@
-Passionfruit Wishlist & Change Log
+Passionfruit Change Log, Known Issues and Wishlist
 
 This is a roadmap of sorts, with a more playful approach. This can also be considered the 
 home of all of the issues I've found. Think of it as Christmas time for passionfruit, what 
 needs to be fixed and what should be added.
 
 Changes in 1.0.2
--	Fixed browser detect bugs
+-	Fixed browser detect bugs in detectmobile.php
 -	Added plugin for initial thumbnail build (script you run if thumbs don't exist to get a 
 	new gallery or album up and running without the need for external/additional prep)
 -	Fixed htaccess file to include images in the gzip compression for faster load times
@@ -13,17 +13,23 @@ Changes in 1.0.2
 -	Update demo html/css, removing pixels for percentage to prevent the body being wider 
 	then the browser viewport
 -	Fiexd the $_fancybox.close runaway timer
--	The function now gathers image exif metadata, but doesn't do anything with it yet
 
-Version 1.0.2 Wishlist
--	Separate passionfuit from the index.php file into it's own include as passionfruit.php
--	Combine javascript includes into a single file sans errors
+Changes in 1.0.3
+-	The function now gathers image exif metadata, but doesn't do anything with it yet
 -	iOS display error fix
--	Better documentation for 3rd party script implementation (help users access features in
-	isotope, queryloader, bbq, cloud-zoom and fancybox)
--	Better optimization documentation (passionfruit can be slow if you have 200+ images)
--	Fix back button bug (inability to go back to the original load state)
--	Fix recursive gallery loading when 4+ levels deep
+-	Fixed createthumbs.php mkdir error
+-	Added support for PHP4 for the createthumbs.php script (I still recommend PHP5)
+-	Added documentation of htaccess use and optimization for the gallery
+-	Numberous bug fixes in createthumbs.php
+
+Version 1.0.3 - Current Version as of 18 November 2011
+
+Known Issues
+-	Need to combine javascript includes into a single file sans errors
+-	Need better documentation for 3rd party script implementation (help users access features 
+	in isotope, queryloader, bbq, cloud-zoom and fancybox)
+-	Back button bug (inability to go back to the original load state)
+-	Recursive gallery loading when 4+ levels deep will not process/output images
 
 Version 1.1 Wishlist
 -	Enable ajax/json API so you only load and append content you want to see instead of 

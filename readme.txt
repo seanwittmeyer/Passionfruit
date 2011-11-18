@@ -1,4 +1,4 @@
-Passionfruit 1.0.2, a simple photo gallery
+Passionfruit 1.0.3, a simple photo gallery
 
 By Sean Wittmeyer (sean at zilifone dot net)
 http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery
@@ -58,8 +58,14 @@ Contents:
 		'true' with 'false'. The script is only intended to make sure each big image 
 		has a thumbnail. If an image already has a thumb, the script will skip it.
 	
-	Step 3:
-		Visit your gallery and customize it.
+	Step 3: Optimize your gallery
+		Passionfruit comes with a number of tools that help optimize the gallery
+		out of the box. The most important tool in making your site faster is to use
+		the htaccess file. To do this, upload the file to your server and rename it:
+		
+			rename htaccess to .htaccess (make sure you have the dot and no extension)
+		This will enable php5 if available and will also optimize loading and speed
+		of your gallery.
 	
 	Some notes on naming your images and folders (albums):
 	  
@@ -122,7 +128,7 @@ Contents:
 	Note: If you are going to use this in a commercial project, you need to buy a 
 	one-time license for Isotope via (http://isotope.metafizzy.co).
 
-	Last update: 18-11-2011 (version 1.0.2)
+	Last update: 18-11-2011 (version 1.0.3)
 
 	Thanks for playing and have a nice day!
 
@@ -153,7 +159,13 @@ Contents:
 
 8	COMMON ERRORS
 
+	You only see the loading bar and the percentage stays at 0%
+		This means that the thumbnails are missing and you need to generate them. You can do
+		this by going to http://example.com/createthumbs.php (replace example.com with your website)
+		
+		
 	Error: Warning: getimagesize(images/event/IMG_1234.jpg) [function.getimagesize]: failed to open stream: No such file or directory in /path/to/your/website/index.php on line 146
+
 		This means your image in the thumbs folder doesn't have a match in the images folder. 
 		Check naming (ie the extension must be the same) and path. So if my image (IMG_1234.jpg) 
 		is in my thumbs folder (/thumbs/event/IMG_1234.jpg), then the big version of this image
@@ -162,9 +174,20 @@ Contents:
 		NOTE: IMG_1234.JPG is not equal to IMG_1234.jpg (note the extension).
 
 	If your event/folder shows up but no images show up, this may mean you have a space in your 
+
 		folder name. Make sure all folders have no spaces in them, so instead of (Family Trip 2011), 
 		you can use (family_trip_2011). Keep in mind that you can set event covers and the title 
 		(with spaces) in a meta.txt file.
+		
+	When making thumbnails with createthumbs.php:
+	
+	Warning:  mkdir() expects at most 2 parameters, 3 given in /path/to/your/website/createthumbs.php on line 124
+		This error comes up if you do not have PHP5 installed. If you have php4 or lower, you will get this error
+		when the script tries to make folders. You may want to look into upgrading php5 for passionfruit.
+		
+		This is a warning, if you get a red "process failed" message, you need to upgrade to php5, 
+		if you see the green success message at the bottom of the page, the script tried an alternate
+		method and it worked, you don't need to worry, all is good :)
 
 
 

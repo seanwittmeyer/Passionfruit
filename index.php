@@ -1,6 +1,6 @@
 <?php
 
-/*	Passionfruit 1.0.2, a simple photo gallery
+/*	Passionfruit 1.0.3, a simple photo gallery
  *	By Sean Wittmeyer (sean at zilifone dot net)
  *	http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery
  *
@@ -37,7 +37,7 @@
  *	BBQ 1.2.1 by Ben Alman (http://benalman.com/projects/jquery-bbq-plugin/)
  *	Cloud Zoom 1.0.2 by R. Cecco (http://www.professorcloud.com)
  *
- *	Known Issues in 1.0.2:
+ *	Known Issues in 1.0.3:
  *	Empty folders still show as blank boxes.
  *	Folders 4 levels deep don't show images
  *	Back button doesn't take you to the top level gallery listing
@@ -45,7 +45,7 @@
  *	Licensed under the MIT license:
  *	http://www.opensource.org/licenses/mit-license.php
  *
- *	Last update: 18-11-2011 (version 1.0.2)
+ *	Last update: 18-11-2011 (version 1.0.3)
  *
  *	Thanks for playing and have a nice day!
  */
@@ -182,6 +182,6 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 
 /*  KARMA  *
 	If you like Passionfruit, share it with your friends. A simple link will ensure happiness for all :) */
-	print 'Powered by <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery" target="_blank">Passionfruit 1.0.2</a>';	
+	print 'Powered by <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery" target="_blank">Passionfruit 1.0.3</a>';	
 
 ?>

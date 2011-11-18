@@ -1,6 +1,6 @@
 <?php
 
-/*	Passionfruit Thumb Creator (GD) 1.0.2
+/*	Passionfruit Thumb Creator (GD) 1.0.3
  *	By Sean Wittmeyer (sean at zilifone dot net)
  *
  *	This script allows you to create thumbs from full size images for the 
@@ -25,20 +25,28 @@
  *	generate the thumbnail of the larger image).
  *
  *	Known Issues in 1.0.2:
- *	Image quality of images created, will look into other options
+ *	live updates via flush() does not work.
  *	
  *	Licensed under the MIT license:
  *	http://www.opensource.org/licenses/mit-license.php
  *
- *	Last update: 17-11-2011 (version 1.0.2)
+ *	Last update: 18-11-2011 (version 1.0.2)
  *
  */
+
+
+//////////////// SETTINGS - you can customize the script below ///////////////////
+
+/*  SCRIPT ON/OFF SWITCH  *
+	You can turn this script on by setting this to true */
+	$active = true;								// enable thumb creator, set to true to make thumbs
  
  
 /*	INCREASE MEMORY ALLOWANCE
 	This will allow this script more memory so we can muscle through larger files. The script includes functions to try to manage used memory 
-	larger images will still need more memory. The default is usually ~8MB, this script will remove the limit. */
-	ini_set('memory_limit','256M');
+	larger images will still need more memory. The default is usually ~8MB, this script will remove the limit. 
+	Uncomment this line (remove the 2 slashes) if you are running into memory errors with this script. */
+	//ini_set('memory_limit','256M');
 	
 	
 /*  BENCHMARKING  *
@@ -51,10 +59,6 @@
 	$starttime = $mtime; 
 
 
-/*  SCRIPT ON/OFF SWITCH  *
-	You can turn off this script by setting this to false */
-	$active = true;									// enable thumb creator
-
 /*  SET UP  */
 
 	$path_thumbs = "thumbs/";						// path to the thumbs directory (thumbs/ is default, make sure you include the trailing slash)
@@ -62,55 +66,52 @@
 	$path = "";										// relative path to the thumbs from this script, leave blank if the thumbs and images directories are in the same directory as this script.
 	$desired_width = 200;							// width of thumbnails to create, 200 is default with passionfruit.
 
-    //apache_setenv('no-gzip', 1);
-    ini_set('zlib.output_compression', 0);
-    ini_set('implicit_flush', 1);
-    for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
-    ob_implicit_flush(1);
+//////////////// DO NOT EDIT ANYTHING BELOW THIS LINE OR THE SCRIPT MAY NO LONGER WORK AS YOU EXPECT ///////////////////
 
+	$GLOBALS["thumbscount"] = 0;
+
+/*  FUNCTIONS  */
 
 function make_thumb($src,$dest,$desired_width) {
 	// this is the function that makes a thumb if one doesnt exist
-	//echo "source is $src \n";
-	//echo "destination is $dest \n";
-	//echo "width is $desired_width \n";
 	$handle = fopen($src, "r");
 	$contents = fread($handle, filesize($src));
 	fclose($handle);
 	$source_image = imagecreatefromstring($contents);
-	unset($contents);																	// read source image, get height and width
 	$width = imagesx($source_image);
 	$height = imagesy($source_image);
-	$desired_height = floor($height*($desired_width/$width));							// calculate height
-	$virtual_image = imagecreatetruecolor($desired_width,$desired_height);				// create virtual image
-	imagecopyresampled($virtual_image,$source_image,0,0,0,0,$desired_width,$desired_height,$width,$height); 	// resize
-	imagejpeg($virtual_image,$dest,90);													// make an image at 90% quality
+	$desired_height = floor($height*($desired_width/$width));
+	$virtual_image = imagecreatetruecolor($desired_width,$desired_height);
+	imagecopyresampled($virtual_image,$source_image,0,0,0,0,$desired_width,$desired_height,$width,$height);
+	imagejpeg($virtual_image,$dest,90);
 	imagedestroy($source_image);
-	imagedestroy($virtual_image);														// clear up memory for next image
-}
+	imagedestroy($virtual_image);
+	$thumb_count = $GLOBALS["thumbscount"];
+	$thumb_count++;
+	$GLOBALS["thumbscount"] = $thumb_count;
+} // end function make_thumb();
 
 function findimages($dir,$dir_thumbs,$path,$desired_width) {
 	// This function is the main function of the script, it does all of the work.
 
-	// set some variables
-
+	
 	// open our thumbs dir, and proceed to read its contents
 	if (is_dir($dir.$path)) {
 		if ($dh = opendir($dir.$path)) {
-			while (($file = readdir($dh)) !== false) {									// for each item, lets do something if it's a directory
-				if (filetype($dir.$path.$file) == 'dir') {								// if the file is a directory, lets play with it
-					if ($file == '..' || $file == '.') { 								// lets ignore the current and parent directories
+			while (($file = readdir($dh)) !== false) {
+				if (filetype($dir.$path.$file) == 'dir') {
+					if ($file == '..' || $file == '.') {
 						continue;
-					} else {															// fetch the meta, if any
+					} else {
 						echo "\nOpening '$file' directory... \n\n";
-						flush(); ob_flush();														// send data to the browser, to make it seem like things are moving along
-						$newpath = $path.$file.'/';										// append a trailing slash for opendir()
-						findimages($dir,$dir_thumbs,$newpath,$desired_width);			// run this function again for the new directory
+						flush(); ob_flush();
+						$newpath = $path.$file.'/';
+						findimages($dir,$dir_thumbs,$newpath,$desired_width);
 						echo "\nClosing '$file' directory... \n\n";
-						flush(); ob_flush();														// send the new directory data to the browser
+						flush(); ob_flush();
 					}
 				} else {																
-					if (getimagesize($dir.$path.$file) !== false) {						// if it's not an image, it would be false and nothing would happen
+					if (getimagesize($dir.$path.$file) !== false) {
 						echo "Found image called '$file' \n";
 						flush(); ob_flush();
 						if (is_file($dir_thumbs.$path.$file) == false) {					
@@ -119,18 +120,26 @@ function findimages($dir,$dir_thumbs,$path,$desired_width) {
 							if (!is_dir($dir_thumbs.$path)) {
 								echo "Folder does not exist, creating it... ";
 								flush(); ob_flush();
-								mkdir($dir_thumbs.$path,0755,true);
+								$mkdirpath = $dir_thumbs.$path;
+								mkdir($mkdirpath,0755,true);
+								if (mkdir($mkdirpath,0755,true) == false) {
+									echo "This script requires PHP5 to run, which you may not have. See the readme.txt for details.\n\nTrying to use older function... ";
+									if (!is_dir($dir_thumbs)) { 				// If server isn't running PHP5, the recursive function will not work, so we need to check if
+										mkdir($dir_thumbs,0755);				// the thumbs directory exists, if not, make it. then all will be warnings instead of failure.
+									}
+									mkdir($mkdirpath,0755);
+								}
 								if (filetype($dir_thumbs.$path) !== 'dir') { 
-									exit("Can't make folder $path, this is the end. \n\n\nProcess Failed"); 
+									exit("Can't make folder $path, this is the end. \n\n\n<a name=\"bottom\" style=\"color:red;\">Process Failed</a>"); 
 								} else {
-									echo "success. \n";
+									echo "success. \n\n";
 									flush(); ob_flush();
 								}
 							}
 							echo "... ";
 							make_thumb($dir.$path.$file,$dir_thumbs.$path.$file,$desired_width);
 							if (getimagesize($dir_thumbs.$path.$file) == false) {
-								exit("Create image failed. This is the end. \n\n\nProcess Failed");
+								exit("Create image failed. This is the end. \n\n\n<a name=\"bottom\" style=\"color:red;\">Process Failed</a>");
 							} else {
 								echo "success! Thumb for $file created, next... \n";
 								flush(); ob_flush();
@@ -142,33 +151,51 @@ function findimages($dir,$dir_thumbs,$path,$desired_width) {
 					}
 				}
 	        }
-			closedir($dh);																// close the directory, we don't need it anymore
+			closedir($dh);
 		}
 	}
 } // end function findimages();
-if ($active) {
-	echo "<html><body><pre style=\"font-size:11px;\">Hello! \nRunning Passionfruit's Create Thumbs script version 1.0.2 \n\nOpening the images folder at $path_images and writing thumbs to $path_thumbs \n";
-	$imagetypes = imagetypes();
-	ob_start();
-	$memoryusage = ini_get('memory_limit');
-	echo "The following image types are supported: $imagetypes \n";
-	echo "Memory available for this process: $memoryusage \n";
-	echo "Here we go, opening the first directory... \n\n";
-	flush();
-	findimages($path_images,$path_thumbs,$path,$desired_width);
-	echo "\n\n\n";
-	echo "Success, all images now have thumbs. Passionfruit gallery should now work with your images. \n\nWoo Hoo! \n\n";
 
+/*  RUN THE SCRIPT  */
+
+ini_set('zlib.output_compression', 0);
+ini_set('implicit_flush', 1);
+if (isset($_GET['go'])) { $go = true; }
+if ($active) {
+	if ($go) {
+		echo "<html><body style=\"background:white;padding:0;margin:0;\"><pre style=\"font-size:11px;\">Running Passionfruit's Create Thumbs script version 1.0.2 \n\n";
+		echo "Starting log...\nHere we go, opening the first directory...\n\n";
+	   	for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
+	   	ob_implicit_flush(1);
+		findimages($path_images,$path_thumbs,$path,$desired_width);
+	   	for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
+	   	ob_implicit_flush(1);
+		echo "\n\nCleaning up...\n";
+		$end_thumb_count = $GLOBALS["thumbscount"];
+		echo "<b style=\"font-size:14px;color:green;\">Success! $end_thumb_count thumbs were made, all images now have thumbs.</b> \nPassionfruit gallery is now updated and should work. \n\nWoo Hoo! \n\n";
+		/*  BENCHMARKING  *
+			So, how long did it take for passionfruit to run? */
+			$mtime = microtime(); 
+			$mtime = explode(" ",$mtime); 
+			$mtime = $mtime[1] + $mtime[0]; 
+			$endtime = $mtime; 
+			$totaltime = ($endtime - $starttime); 
+			echo "<a name=\"bottom\">It took $totaltime seconds to get the dilithium chamber at maximum, captain. Scroll up to see the log.</pre></body></html>";
+	} else {
+		echo "<html><body><pre style=\"font-size:11px;\">Hello! \nPassionfruit's Create Thumbs version 1.0.2 \n\nOpening the images folder at $path_images and writing thumbs to $path_thumbs \n";
+		$imagetypes = imagetypes();
+		ob_start();
+		$memoryusage = ini_get('memory_limit');
+		$mtime = microtime();
+		echo "The following image types are supported: IMG_GIF | IMG_JPG | IMG_PNG | IMG_WBMP | IMG_XPM \n";
+		echo "Memory available for this process: $memoryusage \nSearching for folders and images... \n\nplease wait, this may take a minute or two...\n\n\n";
+		echo '<iframe src="./createthumbs.php?go&t='.$mtime.'#bottom" width="100%" height="65%" style="background: transparent url(resources/loading.gif) top left no-repeat; border: 1px solid #FFF;"><p>Your browser does not support iframes. <a href="./createthumbs.php?go&t='.$mtime.'">Click here to start the script</a>.</p></iframe></body></html>';
+		flush();
+		for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
+		ob_implicit_flush(1);
+	}
 } else { 
-	echo "Script not active."; 
+	echo "Script disabled."; 
 }
 
-
-/*  BENCHMARKING  *
-	So, how long did it take for passionfruit to run? */
-	$mtime = microtime(); 
-	$mtime = explode(" ",$mtime); 
-	$mtime = $mtime[1] + $mtime[0]; 
-	$endtime = $mtime; 
-	$totaltime = ($endtime - $starttime); 
-	echo "This page was synthesized from pure unicorn tears in a mere $totaltime seconds </pre></body></html>";
+// That's all folks!
