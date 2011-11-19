@@ -30,7 +30,7 @@
  *	Licensed under the MIT license:
  *	http://www.opensource.org/licenses/mit-license.php
  *
- *	Last update: 18-11-2011 (version 1.0.2)
+ *	Last update: 18-11-2011 (version 1.0.3)
  *
  */
 
@@ -163,7 +163,7 @@ ini_set('implicit_flush', 1);
 if (isset($_GET['go'])) { $go = true; }
 if ($active) {
 	if ($go) {
-		echo "<html><body style=\"background:white;padding:0;margin:0;\"><pre style=\"font-size:11px;\">Running Passionfruit's Create Thumbs script version 1.0.2 \n\n";
+		echo "<html><body style=\"background:white;padding:0;margin:0;\"><pre style=\"font-size:11px;\">Running createthumbs.php \n\n";
 		echo "Starting log...\nHere we go, opening the first directory...\n\n";
 	   	for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
 	   	ob_implicit_flush(1);
@@ -182,7 +182,7 @@ if ($active) {
 			$totaltime = ($endtime - $starttime); 
 			echo "<a name=\"bottom\">It took $totaltime seconds to get the dilithium chamber at maximum, captain. Scroll up to see the log.</pre></body></html>";
 	} else {
-		echo "<html><body><pre style=\"font-size:11px;\">Hello! \nPassionfruit's Create Thumbs version 1.0.2 \n\nOpening the images folder at $path_images and writing thumbs to $path_thumbs \n";
+		echo "<html><body><pre style=\"font-size:11px;\">Hello! \nPassionfruit's Create Thumbs version 1.0.3 \n\nOpening the images folder at $path_images and writing thumbs to $path_thumbs \n";
 		$imagetypes = imagetypes();
 		ob_start();
 		$memoryusage = ini_get('memory_limit');
