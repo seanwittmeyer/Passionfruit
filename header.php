@@ -12,9 +12,9 @@
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<link rel="stylesheet" href="./resources/passionfruit.css" />
 	<link rel="stylesheet" href="./resources/styles.css" />
-	<script src="/resources/jquery-1.6.2.min.js"></script> <!-- Required for passionfruit -->
-	<script src="/resources/js/queryLoader.js"></script> <!-- Required for loading bar -->
-	<script src="/resources/js/modernizr-transitions.js"></script> <!-- Required for animations -->
+	<script src="./resources/jquery-1.6.2.min.js"></script> <!-- Required for passionfruit -->
+	<script src="./resources/js/queryLoader.js"></script> <!-- Required for loading bar -->
+	<script src="./resources/js/modernizr-transitions.js"></script> <!-- Required for animations -->
 	
 	<!-- This activates the loading bar, if you don't want to use it, remove the following 5 lines from <script> to </script> -->
 	<script>

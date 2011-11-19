@@ -46,7 +46,7 @@
 	This will allow this script more memory so we can muscle through larger files. The script includes functions to try to manage used memory 
 	larger images will still need more memory. The default is usually ~8MB, this script will remove the limit. 
 	Uncomment this line (remove the 2 slashes) if you are running into memory errors with this script. */
-	//ini_set('memory_limit','256M');
+	ini_set('memory_limit','256M');
 	
 	
 /*  BENCHMARKING  *
