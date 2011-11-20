@@ -165,7 +165,10 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 
 
 /*  BUILD THE GALLERY  
+
 	Set the header and footer files above in the 'set up' section */
+	ini_set('max_execution_time','61'); // lest make sure the script has enough time to load fully, no longer then a minute tho. if longer, it doesn't matter because people won't wait that long.
+
 	include($header);																		// start with including the header file
 	passionfruit($dir,$dir_images,$class_dir,$class_img,$path,'','','','');					// begin searching the base directory
 	include($footer);																		// end with including the footer file
