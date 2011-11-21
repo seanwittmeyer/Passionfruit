@@ -88,6 +88,15 @@
 
 }
 
+/* User interface features */
+
+.zoomon:after {
+	content: ' is On';
+}
+.zoomoff:after {
+	content: ' is Off';
+}
+
 /* Transitions */
 .isotope,
 .isotope .isotope-item {
