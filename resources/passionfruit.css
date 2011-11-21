@@ -62,6 +62,7 @@
 .dir { 
 	width: 410px;
 	height: 276px; /* height of 2 thumbnails to make things look nice */
+	background-size: cover;
 }
 .dir .bg {
 	height: 100%;
