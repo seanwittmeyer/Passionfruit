@@ -1,6 +1,6 @@
 <?php
 
-/*	Passionfruit 1.0.3, a simple photo gallery
+/*	Passionfruit 1.0.4, a simple photo gallery
  *	By Sean Wittmeyer (sean at zilifone dot net)
  *	http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery
  *
@@ -21,11 +21,6 @@
  *	to make thumbs if you don't want to do it yourself. The script will make the 
  *	folders and put the thumbs in the right space.
  *	
- *	You may name the albums anything you want. The folder names should have NO 
- *	SPACES. To have a pretty album name, read about the meta.txt file below. 
- *	Avoid naming events/directories the foillowing: box, img, dir, bg, lb
- *	
- *
  *	QUESTIONS? See the included readme.txt file for instructions on using this
  *	gallery and for help with all of passionfruit's features.
  *	
@@ -36,16 +31,11 @@
  *	Fancybox 1.3.4 by Janis Skarnelis(http://fancybox.net/)
  *	BBQ 1.2.1 by Ben Alman (http://benalman.com/projects/jquery-bbq-plugin/)
  *	Cloud Zoom 1.0.2 by R. Cecco (http://www.professorcloud.com)
- *
- *	Known Issues in 1.0.3:
- *	Empty folders still show as blank boxes.
- *	Folders 4 levels deep don't show images
- *	Back button doesn't take you to the top level gallery listing
  *	
  *	Licensed under the MIT license:
  *	http://www.opensource.org/licenses/mit-license.php
  *
- *	Last update: 18-11-2011 (version 1.0.3)
+ *	Last update: 18-12-2011 (version 1.0.4)
  *
  *	Thanks for playing and have a nice day!
  */
@@ -68,9 +58,18 @@
 	$class_dir = "dir";								// css class for directory div (dir by default)
 	$class_img = "img";								// css class for image div (img by default)
 	$path = "";										// relative path to the thumbs, leave blank if the thumbs and images directories are in the same directory as this script.
+	
+	$dnspth = 'photos.seanwittmeyer.com/';									// Leave this blank unless you know what you are doing. Learn about download parallelization support in the documentation.
+
+
+
+
 
 
 //	DON'T EDIT ANYTHING BELOW or the gallery may no longer work. You have been warned.
+
+
+
 
 /*  BENCHMARKING  *
 	Passionfruit can be a processor intensive script if you have 100+ images in your gallery. To see how long the page takes to load, you can 
@@ -101,7 +100,7 @@ function fetch_random_image($dir) {														// Randomly find a image for th
 	return $files[$rand]; 																// return the lucky winner
 } // end function fetch_random_image();
 
-function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$zoom,$properpath,$metatags) {
+function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir = NULL,$properpath = NULL,$metatags = NULL) {
 	// This function is the main function of the script, it does all of the work.
 
 	// set some variables
@@ -112,6 +111,18 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 		$stylehide = 'display: none;'; 
 		$home = '';
 	}
+	
+	// setup download parallelization, if enabled
+	//global $dnspth;
+	$dnsflg = 0;
+	$dnsvar = "";
+
+	if (isset($GLOBALS["dnspth"])) { 
+		$dnspre = "http://";
+		$dnspth = $GLOBALS["dnspth"];
+		$dnsflg = 1;
+	}
+	
 	// open our thumbs dir, and proceed to read its contents
 	if (is_dir($dir.$path)) {
 		if ($dh = opendir($dir.$path)) {
@@ -137,23 +148,23 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 						$newpath = $currentdir.'/'.$file.'/';							// append a trailing slash for opendir()
 						flush();														// send data to the browser, to make it seem like things are moving along
 						$newproperpath = $properpath.$event_name[$file].'/';
-						passionfruit($dir,$dir_images,$class_dir,$class_img,$newpath,$file,$newzoom[$file],$newproperpath,$metatags);	// run this function again for the new directory
+						passionfruit($dir,$dir_images,$class_dir,$class_img,$newpath,$file,$newproperpath,$metatags);	// run this function again for the new directory
 						flush();														// send the new directory data to the browser
 					}
 				} elseif ($file == 'meta.txt') {										// the meta file isn't needed so we'll let it hang out in silence
+					continue;
 				} else {																// not a dir or meta, maybe an image…
-					if (getimagesize($dir.$path.$file) !== false) {						// if it's not an image, it would be false and nothing would happen
+					if (exif_imagetype($dir.$path.$file) !== false) {					// if it's not an image, it would be false and nothing would happen
 						list($width, $height, $type, $attr) = getimagesize($dir.$path.$file);
-						list($bigwidth, $bigheight, $bigtype, $bigattr) = getimagesize($dir_images.$path.$file);
+						// list($bigwidth, $bigheight, $bigtype, $bigattr) = getimagesize($dir_images.$path.$file);
 						
 						// build the box
-						if ($zoom == 'no') {											// if $zoom is set to no in the meta.txt, then lets abide
-							$lb = 'lbnz';												// no-zoom class selector for fancybox
-						} else {
-							$lb = 'lb';													// zoom is on by default, this is the fancybox selector class
-						}
 						$rel[$file] = str_replace(' ', "", $currenttags);				// turn the directories in the path into tags
-						echo "<a href=\"$dir_images$path$file\" class=\"$lb \" rel=\"$rel[$file]\"><div class=\"$box $class_img $rel[$file] $metatags\" style=\" background: url(".$dir.$path.$file.') no-repeat; width: '.$width.'px; height: '.$height.'px;" onclick=""></div></a>'."\n";
+						if ($dnsflg == 1) {
+							$dnswcd = str_replace('_', "", $rel[$file]);
+							$dnsvar = $dnspre.strtolower($dnswcd).".".$dnspth;
+						}
+						echo "<a href=\"$dir_images$path$file\" class=\"lb\" rel=\"$rel[$file]\"><div class=\"$box $class_img $rel[$file] $metatags\" style=\" background: url(".$dnsvar.$dir.$path.$file.') no-repeat; width: '.$width.'px; height: '.$height.'px;" onclick=""></div></a>'."\n";
 						flush();														// send the image box to the browser
 					}
 				}
@@ -164,14 +175,14 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 } // end function passionfruit();
 
 
-/*  BUILD THE GALLERY  
+/*  BUILD THE GALLERY  *
 
 	Set the header and footer files above in the 'set up' section */
 	ini_set('max_execution_time','61'); // lest make sure the script has enough time to load fully, no longer then a minute tho. if longer, it doesn't matter because people won't wait that long.
 
-	include($header);																		// start with including the header file
-	passionfruit($dir,$dir_images,$class_dir,$class_img,$path,'','','','');					// begin searching the base directory
-	include($footer);																		// end with including the footer file
+	include($header);																	// start with including the header file
+	passionfruit($dir,$dir_images,$class_dir,$class_img,$path);							// begin searching the base directory
+	include($footer);																	// end with including the footer file
 
 /*  BENCHMARKING  *
 	So, how long did it take for passionfruit to run? */
@@ -185,6 +196,6 @@ function passionfruit($dir,$dir_images,$class_dir,$class_img,$path,$currentdir,$
 
 /*  KARMA  *
 	If you like Passionfruit, share it with your friends. A simple link will ensure happiness for all :) */
-	print 'Powered by <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery" target="_blank">Passionfruit 1.0.3</a>';	
+	print 'Powered by <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery" target="_blank">Passionfruit 1.0.4</a>';	
 
 ?>

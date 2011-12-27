@@ -1,6 +1,6 @@
 <?php
 
-/*	Passionfruit Thumb Creator (GD) 1.0.3
+/*	Passionfruit Thumb Creator (GD) 1.0.4
  *	By Sean Wittmeyer (sean at zilifone dot net)
  *
  *	This script allows you to create thumbs from full size images for the 
@@ -23,9 +23,6 @@
  *	Try reloading the page (the thumbnails that were successfully created will be
  *	sipped the second time around which may free up the necessary memory to 
  *	generate the thumbnail of the larger image).
- *
- *	Known Issues in 1.0.2:
- *	live updates via flush() does not work.
  *	
  *	Licensed under the MIT license:
  *	http://www.opensource.org/licenses/mit-license.php
@@ -112,7 +109,7 @@ function findimages($dir,$dir_thumbs,$path,$desired_width) {
 						flush(); ob_flush();
 					}
 				} else {																
-					if (getimagesize($dir.$path.$file) !== false) {
+					if (exif_imagetype($dir.$path.$file) !== false) {
 						echo "Found image called '$file' \n";
 						flush(); ob_flush();
 						if (is_file($dir_thumbs.$path.$file) == false) {					
@@ -139,7 +136,7 @@ function findimages($dir,$dir_thumbs,$path,$desired_width) {
 							}
 							echo "... ";
 							make_thumb($dir.$path.$file,$dir_thumbs.$path.$file,$desired_width);
-							if (getimagesize($dir_thumbs.$path.$file) == false) {
+							if (exif_imagetype($dir_thumbs.$path.$file) == false) {
 								exit("Create image failed. This is the end. \n\n\n<a name=\"bottom\" style=\"color:red;\">Process Failed</a>");
 							} else {
 								echo "success! Thumb for $file created, next... \n";

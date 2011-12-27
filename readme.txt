@@ -1,4 +1,4 @@
-Passionfruit 1.0.3, a simple photo gallery
+Passionfruit 1.0.4, a simple photo gallery
 
 By Sean Wittmeyer (sean at zilifone dot net)
 http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery
@@ -8,7 +8,7 @@ Contents:
 2	Getting Started
 3	Album Metadata and meta.txt
 4	Credits
-5	Known Issues
+5	Known Issues & Change Log
 6	License (READ IF YOU ARE USING IN A COMMERCIAL/FOR PROFIT PROJECT)
 7	Troubleshooting and Warranty
 8	Common Errors
@@ -115,7 +115,7 @@ Contents:
 		BBQ 1.2.1 by Ben Alman (http://benalman.com/projects/jquery-bbq-plugin/)
 		Cloud Zoom 1.0.2 by R. Cecco (http://www.professorcloud.com)
 
-5	KNOWN ISSUES
+5	KNOWN ISSUES & CHANGE LOG
 	See the included wishlist.txt file for issues and roadmap for future features.
 	The Change Log is also included in that file.
 
@@ -128,7 +128,7 @@ Contents:
 	Note: If you are going to use this in a commercial project, you need to buy a 
 	one-time license for Isotope via (http://isotope.metafizzy.co).
 
-	Last update: 18-11-2011 (version 1.0.3)
+	Last update: 19-12-2011 (version 1.0.4)
 
 	Thanks for playing and have a nice day!
 
@@ -261,7 +261,7 @@ Contents:
 	
 	
 	
-	Options for Navigation
+	OPTIONS FOR NAVIGATION
 
 	You can make text links (<a>) to control and sort the gallery. Links use classes to sort 
 	through images and folders so if a folder has a class, you can sort it. You set classes 
@@ -295,3 +295,81 @@ Contents:
 		$.param({ filter: '.metal' })						>>		"#filter=.metal"
 		$.param({ filter: '.alkali, alkaline-earth' })		>>		"#filter=.alkali%2C+alkaline-earth"
 		$.param({ filter: ':not(.transition)' })			>>		"#filter=%3Anot(.transition)"
+
+	ENABLING/DISABLING IMAGE ZOOM
+	
+	Image zoom is, by default, enabled. While this feature proves to be handy for many users, some may not 
+	enjoy it. Passionfruit now includes a toggle switch in the demo navigation that turns this on and off. 
+	You can remove this toggle switch by simply removing the link in the navigation bar.
+	See the html in the header file to learn more about this.
+
+
+	DOWNLOAD PARALLELIZATION (new in 1.0.4)
+	
+	If your gallery has more then 100 images, you may have noticed that the site can take some time to load, 
+	especially on slower network connections. One way to speed up the load time is to utilize download 
+	parallelization, which allows the browser to download the images from many servers instead of one. While
+	most users are only using one server (as the gallery was designed for), we can trick the browser into 
+	giving us faster load speeds while only using one server. 
+	
+	To do this, we utilize Apache's wildcard subdomain feature. If your server has this enabled, then you can
+	utilize this feature. Basically, what we do is change the path to the image slightly so that you access the
+	same file from multiple URLs. 
+	
+	So, if your image is at this URL:
+		http://example.com/images/image_01.jpg
+		
+	You can also access it with this URL: 
+		http://images.example.com/images/image_01.jpg
+		
+	This only works if the subdomain is not already being used, and if you have the subdomain wildcard setup.
+	The way the feature works for passionfruit is quite simple. When enabled, the gallery will add the current
+	directory as the subdomain. So if the image "image_01.jpg" is in the "birthday2011" directory, then the 
+	image will load	from 
+		http://birthday2011.example.com/images/birthday2011/image_01.jpg 
+	instead of it's real location at
+		http://example.com/images/birthday2011/image_01.jpg 
+
+	Hey, I want this!
+	I bet you do if you are a power user, of if you have lots of folders/albums. To get started, you must make 
+	sure you have subdomain wildcard support on your server. It's simple to test if you do. Just visit your site
+	with any random subdomain. If you get the same site, you can use this feature, if not, you can go about learning
+	how to get it enabled by reading about it here: http://en.wikipedia.org/wiki/Wildcard_DNS_record
+	
+	If all is good and ready to work, you can enable it by finding the following line in the index.php file and adding 
+	your domain, with a trailing forward slash.
+
+		Find:	$dnspth = "";
+		
+	Add your domain in the quotes, so if your gallery is located at "http://photos.example.com/gallery/", you should have:
+		
+		$dnspth = "photos.example.com/gallery";
+		
+	Don't worry about the "http://" part, the gallery automatically deals with that.
+	
+	Once you do this, save and upload the index.php file and reload your gallery. If you view the source, you will see 
+	each image's background now has the subdomain. This only affects the background images (the second URL in each line 
+	of code), and the source code will	look something like this: 
+	
+	<a href="images/birthday2011/image_01.jpg" class="lb" rel="arrival"><div class="box img birthday2011" style="background: url(http://birthday2011.example.com/thumbs/birthday2011/image_01.jpg) no-repeat; width: 200px; height: 133px;" onclick=""></div></a>
+	
+	This feature, if used on a server not supporting wildcard subdomains, will not load any images, you can test 
+	by clicking on your album in the gallery webpage and if you don't see your images, something isn't working.
+	
+	This is an experimental feature, meaning it has bugs and issues. If you use it, the loading bar will no longer
+	work. So it depends on what you want more, a loading bar or faster load times. I am aware of the issue and am working 
+	on a fix. The problem lies within the rules of how JSON works with cross-domains. When the loading script runs, it 
+	finds all of the images we are loading and gets a preview of it. It is not allowed to open files on other domains
+	which means it gives up, so your loading bar may not move or load at all. You can turn off the loading bar by 
+	removing the following lines of code from your header.php file:
+	
+		<script>
+			$(document).ready(function () {
+				$("#container").queryLoader2();
+			});
+		</script>
+		
+		
+	Cheers and good luck. The demo files included in the passionfruit zipfile do not have download parallelization
+	enabled, but you can see a working demo of it at http://photos.seanwittmeyer.com
+ 

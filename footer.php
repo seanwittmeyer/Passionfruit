@@ -2,11 +2,11 @@
 
 </div> <!-- #container --> <!-- you must include this for passionfruit to work -->
 
-<script async src="resources/js/jquery.isotope.min.js"></script> <!-- Required for passionfruit -->
-<script async src="resources/js/jquery.mousewheel-3.0.4.pack.js"></script> <!-- Required if you want to use the scroll wheel on a mouse in the image popups -->
-<script async src="resources/js/cloud-zoom.1.0.2.min.js"></script> <!-- Required if you want the zoom feature in the image popups -->
-<script async src="resources/js/jquery.fancybox-1.3.4.pack.js"></script> <!-- Required for image popups -->
-<script async src="resources/js/jquery.ba-bbq.min.js"></script> <!-- Required for passionfruit -->
+<script src="resources/js/jquery.isotope.min.js"></script> <!-- Required for passionfruit -->
+<script src="resources/js/jquery.mousewheel-3.0.4.pack.js"></script> <!-- Required if you want to use the scroll wheel on a mouse in the image popups -->
+<script src="resources/js/cloud-zoom.1.0.2.min.js"></script> <!-- Required if you want the zoom feature in the image popups -->
+<script src="resources/js/jquery.fancybox-1.3.4.pack.js"></script> <!-- Required for image popups -->
+<script src="resources/js/jquery.ba-bbq.min.js"></script> <!-- Required for passionfruit -->
 
 <!-- BEGIN Passionfruit Javascript (include this to make passionfruit work) -->
 <script>

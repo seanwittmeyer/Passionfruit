@@ -12,7 +12,7 @@ Changes in 1.0.2
 -	New cache rules for the htaccess file, allowing image storage in the browser cache
 -	Update demo html/css, removing pixels for percentage to prevent the body being wider 
 	then the browser viewport
--	Fiexd the $_fancybox.close runaway timer
+-	Fixed the $_fancybox.close runaway timer
 
 Changes in 1.0.3
 -	The function now gathers image exif metadata, but doesn't do anything with it yet
@@ -20,16 +20,34 @@ Changes in 1.0.3
 -	Fixed createthumbs.php mkdir error
 -	Added support for PHP4 for the createthumbs.php script (I still recommend PHP5)
 -	Added documentation of htaccess use and optimization for the gallery
--	Numberous bug fixes in createthumbs.php
+-	Numerous bug fixes in createthumbs.php
 
-Version 1.0.3 - Current Version as of 18 November 2011
+Changes in 1.0.4
+-	Added feature allowing download parallelization by distributing the image requests 
+	across multiple hostnames. This will allow the speedup of loading, especially for 
+	galleries with 100+ images. It will only work if your site supports wildcard subdomains.
+	*Note: This has only been tested on apache servers, see documentation on enabling it.
+-	Fixed cache bug forcing the main gallery html to be downloaded instead of displayed
+-	Replaced getimagesize() with exif_imagetype() for image verification to speed up the
+	script and to optimize memory use
+-	Optimized the createthumbs script with the exif_imagetype function
+-	Added more exif data support (doesn't do anything yet but is more efficient then the
+	last version)
+-	Added hover and active effects for improved usability
+-	Changed how meta.txt files work.
+-	Added background-size: cover so folder/gallery background images will fill the box
+	instead of cropping most of the image, especially for larger images.
+
+Version 1.0.4 - Current Version as of 26 December 2011
 
 Known Issues
 -	Need to combine javascript includes into a single file sans errors
 -	Need better documentation for 3rd party script implementation (help users access features 
 	in isotope, queryloader, bbq, cloud-zoom and fancybox)
 -	Back button bug (inability to go back to the original load state)
--	Recursive gallery loading when 4+ levels deep will not process/output images
+-	Recursive gallery loading when 3+ levels deep will not process/output images
+-	QueryLoader fails when download parallelization is enabled due to json cross-domain rules,
+	this only affects users utilizing download parallelization.  
 
 Version 1.1 Wishlist
 -	Enable ajax/json API so you only load and append content you want to see instead of 
@@ -42,3 +60,5 @@ Version 1.1 Wishlist
 -	Optimize php array and variable access in the passionfruit() php function
 -	Access to image attributes in display interface (1.0.2 sets variables with exif data
 	but does not pass it on to the browser for use, I don't have a good UI for it yet...)
+-	Mapping support for albums (set via meta file)
+-	Mapping support for individual geotagged images

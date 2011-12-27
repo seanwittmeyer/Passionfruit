@@ -27,11 +27,11 @@
 </head>
 <body class="homepage ">
 	<header>
-		<a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery"><h1>Passionfruit 1.0.3, a simple photo gallery</h1></a>
+		<a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery"><h1>Passionfruit 1.0.4, a simple photo gallery</h1></a>
 		<p>
 			Passionfruit is a simple and clean photo gallery that avoids the nonsense of backend interfaces and databases created by Sean Wittmeyer. The gallery uses a single file to read the contents of images in your gallery folder and outputs the gallery.
 		</p><p>
-			Passionfruit uses PHP to find images and metadata in your thumbs directory. You can have any number of directories with pictures (hereafter events), and you can cascade events as far as you wish. <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery">Download passionfruit 1.0.3</a>
+			Passionfruit uses PHP to find images and metadata in your thumbs directory. You can have any number of directories with pictures (hereafter events), and you can cascade events as far as you wish. <a href="http://digital.seanwittmeyer.com/2301294/Passionfruit-a-photo-gallery">Download passionfruit 1.0.4</a>
 			<br />&nbsp;
 		</p>
 		<nav id="site-nav">
